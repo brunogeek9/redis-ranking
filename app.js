@@ -30,8 +30,15 @@ app.get('/top10', function (req, res) {
     //     console.log('top10', response);
     //     // write your code here
     // });
-    client.zrevrange('players', -3, -1, 'withscores', function(err, members) {
-        console.log(members);        
+    client.zrange('players', -10, -1, 'withscores', function(err, members) {
+        // console.log(members);
+        for (let index = members.length-1; index > 0; index--) {
+            if( (index%2) == 0){
+                console.log('----------')
+            }
+            const element = members[index];
+            console.log(element);
+        }
     });
 
     res.send(`top 10 jogadores`);
