@@ -25,11 +25,15 @@ app.get('/addscore/:name&:sc', function (req, res) {
 
 app.get('/top10', function (req, res) {
     let args = [ 'players', '+inf', '-inf'];
-    client.zrevrangebyscore(args, function (err, response) {
-        if (err) throw err;
-        console.log('top10', response);
-        // write your code here
+    // client.zrevrangebyscore(args, function (err, response) {
+    //     if (err) throw err;
+    //     console.log('top10', response);
+    //     // write your code here
+    // });
+    client.zrevrange('players', -3, -1, 'withscores', function(err, members) {
+        console.log(members);        
     });
+
     res.send(`top 10 jogadores`);
 });
 
