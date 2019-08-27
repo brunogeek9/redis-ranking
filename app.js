@@ -14,15 +14,25 @@ app.listen(3001, function () {
 app.get('/addscore/:name&:sc', function (req, res) {
     var name = req.params.name;
     var score = req.params.sc;
-    res.send(`adicionando ${score} ao jogador ${name}`);
+    
     var args = [ 'players', 'incr',score, name];
     client.zadd(args, function (err, response) {
         if (err) throw err;
         console.log('added the pontuation '+response+' items.');
-    });
+        res.send(`adicionando ${score} ao jogador ${name}`);
+    });    
+});
 
-
-    
+app.get('/rmscore/:name&:sc', function (req, res) {
+    var name = req.params.name;
+    var score = req.params.sc;
+    var rm = score * -1;
+    var args = [ 'players', 'incr',rm, name];
+    client.zadd(args, function (err, response) {
+        if (err) throw err;
+        console.log('removed the pontuation '+response+' items.');
+        res.send(`removendo ${score} pontos do jogador ${name}`);
+    });    
 });
 
 app.get('/top10', function (req, res) {
