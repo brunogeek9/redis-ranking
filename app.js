@@ -41,8 +41,8 @@ app.get('/top10', function (req, res) {
         var lists=_.groupBy(rev, function(a,b) {
             return Math.floor(b/2);
         });
-        
-        console.log( _.toArray(lists) );
+        //_.toArray(lists)
+        console.log( lists );
         res.status(200).json(lists)
                 
     });
