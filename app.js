@@ -52,8 +52,11 @@ app.get('/top10', function (req, res) {
 });
 
 app.get('/rank/:num', function (req, res) {
-    var num = req.params.num;
-    res.send(`jogador numero ${num}`);
+    var pos = req.params.num * -1;
+    client.zrange('players', pos, pos, 'withscores', function(err, members) { 
+        console.log(members);
+        res.json(_.toArray(members))
+    });
 });
 
 // zrange pl -10 -1
