@@ -2,6 +2,8 @@ const express = require('express');
 const app = express();
 var redis = require('redis');
 var client = redis.createClient();
+var _=require('underscore');
+
 app.listen(3001, function () {
     console.log('escutando sempre a porta 3001!');
       client.on('connect', () => {
@@ -24,24 +26,19 @@ app.get('/addscore/:name&:sc', function (req, res) {
 });
 
 app.get('/top10', function (req, res) {
-    let args = [ 'players', '+inf', '-inf'];
-    // client.zrevrangebyscore(args, function (err, response) {
-    //     if (err) throw err;
-    //     console.log('top10', response);
-    //     // write your code here
-    // });
+    
     client.zrange('players', -10, -1, 'withscores', function(err, members) {
-        // console.log(members);
-        for (let index = members.length-1; index > 0; index--) {
-            if( (index%2) == 0){
-                console.log('----------')
-            }
-            const element = members[index];
-            console.log(element);
-        }
+        
+        var rev = members.reverse(); 
+        var lists=_.groupBy(rev, function(a,b) {
+            return Math.floor(b/2);
+        });
+        
+        console.log( _.toArray(lists) );
+        res.json(lists)
     });
 
-    res.send(`top 10 jogadores`);
+    // ;
 });
 
 app.get('/rank/:num', function (req, res) {
