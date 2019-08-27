@@ -35,27 +35,32 @@ app.get('/rmscore/:name&:sc', function (req, res) {
     });    
 });
 
-app.get('/top10', function (req, res) {
-    
+app.get('/top10', function (req, res) {    
     client.zrange('players', -10, -1, 'withscores', function(err, members) {
-        
         var rev = members.reverse(); 
         var lists=_.groupBy(rev, function(a,b) {
             return Math.floor(b/2);
         });
         
         console.log( _.toArray(lists) );
-        res.json(lists)
+        res.status(200).json(lists)
+                
     });
 
-    // ;
 });
 
 app.get('/rank/:num', function (req, res) {
-    var pos = req.params.num * -1;
-    client.zrange('players', pos, pos, 'withscores', function(err, members) { 
-        console.log(members);
-        res.json(_.toArray(members))
+    var pos = req.params.num;
+    var index = pos * -1;
+    client.zrange('players', index, index, 'withscores', function(err, members) { 
+        if (members.length == 0){
+            var txt = `nao encontrado jogador da posição ${pos} .` ;
+            console.log(txt);
+            res.send(txt);
+        }else{
+            console.log(members);
+            res.json(_.toArray(members))
+        }
     });
 });
 
