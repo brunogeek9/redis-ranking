@@ -8,8 +8,8 @@ npm install
 #### example with docker
 ```
 docker run -d -p 6379:6379 redis:alpine
-
+```
 ### Compiles and hot-reloads for development
 ```
 npm start
-
+```
